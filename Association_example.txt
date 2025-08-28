@@ -1,0 +1,130 @@
+class Registration {
+    String Name;
+    int EmpNo;
+
+    public Registration(String name, int empNo) {
+        Name = name;
+        EmpNo = empNo;
+    }
+
+    public void showRegistration() {
+        System.out.println("Employee Registered: " + Name + " | Emp No: " + EmpNo);
+    }
+}
+
+class Booking {
+    int TicketNo;
+    int Cost;
+    Registration reg;
+
+    public Booking(int ticketNo, int cost, Registration reg) {
+        this.TicketNo = ticketNo;
+        this.Cost = cost;
+        this.reg = reg;
+    }
+
+    public void showBooking() {
+        System.out.println(reg.Name + " booked Ticket No: " + TicketNo + " | Cost: " + Cost);
+    }
+}
+
+class TravelReport {
+    int TravelExpense;
+    Registration reg;
+
+    public TravelReport(int expense, Registration reg) {
+        this.TravelExpense = expense;
+        this.reg = reg;
+    }
+
+    public void showTravel() {
+        System.out.println(reg.Name + " has a travel expense of " + TravelExpense);
+    }
+}
+
+class BusTravel extends TravelReport {
+    String BusType;
+
+    public BusTravel(int expense, Registration reg, String busType) {
+        super(expense, reg);
+        this.BusType = busType;
+    }
+
+    @Override
+    public void showTravel() {
+        System.out.println(reg.Name + " will travel by " + BusType + " | Expense: " + TravelExpense);
+    }
+}
+
+class Event {
+    String EventName;
+    String Venue;
+    String Date;
+    Registration reg;
+
+    public Event(String eventName, String venue, String date, Registration reg) {
+        this.EventName = eventName;
+        this.Venue = venue;
+        this.Date = date;
+        this.reg = reg;
+    }
+
+    public void showEvent() {
+        System.out.println(reg.Name + " registered for Event: " + EventName +
+                " | Venue: " + Venue + " | Date: " + Date);
+    }
+}
+
+class Payment {
+    int PaymentId;
+    int Amount;
+    String Mode;
+    Registration reg;
+
+    public Payment(int paymentId, int amount, String mode, Registration reg) {
+        this.PaymentId = paymentId;
+        this.Amount = amount;
+        this.Mode = mode;
+        this.reg = reg;
+    }
+
+    public void showPayment() {
+        System.out.println(reg.Name + " has paid Rs." + Amount + " using " + Mode+" for booking event ticket");
+    }
+
+    public void processRefund(int amt) {
+        Reimbursement temp = new Reimbursement(amt);
+        temp.ShowReimbursement(reg,"for event ticket");
+    }
+}
+
+class Reimbursement {
+    int refundAmt;
+
+    Reimbursement(int Amt) {
+        refundAmt = Amt;
+    }
+
+    public void ShowReimbursement(Registration reg,String type) {
+        System.out.println(reg.Name + " gets a refund of " + refundAmt+type);
+    }
+}
+
+public class Sample {
+    public static void main(String[] args) {
+        Registration r1 = new Registration("Ramesh", 102);
+        Booking b1 = new Booking(1, 1000, r1);
+        TravelReport t1 = new BusTravel(800, r1, "AC Bus");
+        Event e1 = new Event("Hackathon", "Auditorium", "15-Sep-2025", r1);
+        Payment p1 = new Payment(1001, b1.Cost, "Card", r1);
+        Reimbursement ref1 = new Reimbursement(t1.TravelExpense);
+
+        r1.showRegistration();
+        b1.showBooking();
+        t1.showTravel();
+        e1.showEvent();
+        p1.showPayment();
+        ref1.ShowReimbursement(r1,"for travel");
+        p1.processRefund(p1.Amount);
+    }
+}
